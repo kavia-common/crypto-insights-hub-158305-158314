@@ -1,0 +1,4 @@
+{
+    "command": "npm run test",
+    "working_directory": "/home/kavia/workspace/code-generation/crypto-insights-hub-158305-158314/crypto_edu_frontend"
+}
