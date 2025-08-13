@@ -1,47 +1,92 @@
-import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
+import React, { useEffect, useMemo, useState } from 'react';
 import './App.css';
 
-// PUBLIC_INTERFACE
+import Header from './components/layout/Header';
+import Sidebar from './components/layout/Sidebar';
+import Footer from './components/layout/Footer';
+
+import MarketDashboard from './views/MarketDashboard';
+import Resources from './views/Resources';
+import Profile from './views/Profile';
+import Quizzes from './views/Quizzes';
+import Auth from './views/Auth';
+
+/**
+ * PUBLIC_INTERFACE
+ * App
+ * This is the main application component for the Crypto Education frontend.
+ * It sets up the global theme, maintains view-based navigation state (no routing),
+ * and composes the core layout (Header, Sidebar, Footer) with the main content area.
+ */
 function App() {
   const [theme, setTheme] = useState('light');
+  const [view, setView] = useState('dashboard');
+  const [query, setQuery] = useState('');
 
-  // Effect to apply theme to document element
+  // Apply theme to document element for CSS variables theming.
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
 
-  // PUBLIC_INTERFACE
-  const toggleTheme = () => {
-    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
+  /** PUBLIC_INTERFACE
+   * toggleTheme
+   * Toggles the UI between light and dark modes.
+   */
+  const toggleTheme = () => setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+
+  /** PUBLIC_INTERFACE
+   * handleNavigate
+   * @param {string} nextView - the view identifier to show
+   * Updates the current view in app state (simple view-based navigation).
+   */
+  const handleNavigate = (nextView) => {
+    setView(nextView);
   };
 
+  /** PUBLIC_INTERFACE
+   * handleSearchChange
+   * @param {string} value - the current input value
+   * Stores the search query. Future steps can use this for filtering data.
+   */
+  const handleSearchChange = (value) => {
+    setQuery(value);
+  };
+
+  const CurrentView = useMemo(() => {
+    switch (view) {
+      case 'dashboard':
+        return <MarketDashboard searchQuery={query} />;
+      case 'resources':
+        return <Resources searchQuery={query} />;
+      case 'quizzes':
+        return <Quizzes />;
+      case 'profile':
+        return <Profile />;
+      case 'auth':
+        return <Auth />;
+      default:
+        return <MarketDashboard searchQuery={query} />;
+    }
+  }, [view, query]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <button 
-          className="theme-toggle" 
-          onClick={toggleTheme}
-          aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-        >
-          {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
-        </button>
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <p>
-          Current theme: <strong>{theme}</strong>
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app-root">
+      <Header
+        theme={theme}
+        onToggleTheme={toggleTheme}
+        currentView={view}
+        onNavigate={handleNavigate}
+        onSearchChange={handleSearchChange}
+      />
+
+      <div className="layout">
+        <Sidebar currentView={view} onNavigate={handleNavigate} />
+        <main className="main-content" role="main" aria-live="polite">
+          {CurrentView}
+        </main>
+      </div>
+
+      <Footer />
     </div>
   );
 }

@@ -1,104 +1,362 @@
-/* CSS Variables for Theme Management */
+/* Theme variables based on work item colors: primary #1a202c, secondary #00bcd4, accent #ffc107 */
 :root {
-  /* Light theme colors */
+  /* Light theme */
+  --color-primary: #1a202c;   /* text primary / headings */
+  --color-secondary: #00bcd4; /* highlights / links */
+  --color-accent: #ffc107;    /* accent / warnings */
+
   --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --text-primary: #282c34;
-  --text-secondary: #61dafb;
-  --border-color: #e9ecef;
-  --button-bg: #007bff;
+  --bg-secondary: #f7f9fb;
+  --bg-elevated: #ffffff;
+
+  --text-primary: #1a202c;
+  --text-secondary: #5b667a;
+
+  --border-color: #e6ebf1;
+  --muted: #f0f3f7;
+
+  --button-bg: #1a202c;
   --button-text: #ffffff;
+
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-2: 0 6px 18px rgba(0, 0, 0, 0.06);
 }
 
-[data-theme="dark"] {
-  /* Dark theme colors */
-  --bg-primary: #1a1a1a;
-  --bg-secondary: #282c34;
-  --text-primary: #ffffff;
-  --text-secondary: #61dafb;
-  --border-color: #404040;
-  --button-bg: #0056b3;
-  --button-text: #ffffff;
+[data-theme='dark'] {
+  /* Optional dark mode for future steps */
+  --bg-primary: #121212;
+  --bg-secondary: #1b1b1b;
+  --bg-elevated: #1e1e1e;
+
+  --text-primary: #f5f7fa;
+  --text-secondary: #a9b2c1;
+
+  --border-color: #2a2a2a;
+  --muted: #1a1a1a;
+
+  --button-bg: #00bcd4;
+  --button-text: #0d0d0d;
+
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-2: 0 6px 18px rgba(0, 0, 0, 0.5);
 }
 
-.App {
-  text-align: center;
-  background-color: var(--bg-primary);
+/* Base and layout */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html, body, #root, .app-root {
+  height: 100%;
+}
+
+.app-root {
+  background: var(--bg-primary);
   color: var(--text-primary);
-  min-height: 100vh;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Header */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow-1);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: var(--bg-secondary);
-  min-height: 100vh;
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 16px;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand {
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-badge {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  background: var(--color-secondary);
+  color: #0c1a20;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 999px;
+}
+
+.header-spacer {
+  flex: 1;
+}
+
+.top-nav {
+  display: none;
+  gap: 6px;
+}
+
+.top-nav .nav-btn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-elevated);
   color: var(--text-primary);
-  transition: background-color 0.3s ease;
-  position: relative;
+  font-size: 14px;
+  cursor: pointer;
 }
 
-.App-link {
+.top-nav .nav-btn.active {
+  border-color: var(--color-secondary);
+  color: var(--color-secondary);
+}
+
+/* Search */
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 6px 10px;
+  min-width: 220px;
+}
+
+.search-bar input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  width: 100%;
+}
+
+.search-icon {
   color: var(--text-secondary);
-  transition: color 0.3s ease;
+  font-size: 14px;
 }
 
+/* Theme toggle */
 .theme-toggle {
-  position: absolute;
-  top: 20px;
-  right: 20px;
   background-color: var(--button-bg);
   color: var(--button-text);
   border: none;
   border-radius: 8px;
-  padding: 10px 20px;
-  font-size: 14px;
+  padding: 8px 12px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.1s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: var(--shadow-1);
 }
 
 .theme-toggle:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  opacity: 0.9;
+  opacity: 0.95;
 }
 
 .theme-toggle:active {
-  transform: translateY(0);
+  transform: translateY(1px);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+/* Sidebar + content layout */
+.layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 0;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.sidebar {
+  min-height: calc(100vh - 57px);
+  border-right: 1px solid var(--border-color);
+  background: var(--bg-elevated);
+  position: sticky;
+  top: 57px; /* header height */
+  padding: 16px 12px;
+}
+
+.sidebar .section-title {
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 6px 8px 8px;
+}
+
+.nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav-item {
+  width: 100%;
+}
+
+.nav-link {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-primary);
+  text-decoration: none;
+  padding: 10px 12px;
+  border-radius: 10px;
+  transition: background 0.2s ease, border 0.2s ease, color 0.2s ease;
+  cursor: pointer;
+}
+
+.nav-link:hover {
+  background: var(--muted);
+  border-color: var(--border-color);
+}
+
+.nav-link.active {
+  border-color: var(--color-secondary);
+  color: var(--color-secondary);
+}
+
+/* Main content */
+.main-content {
+  padding: 20px 16px 48px;
+  min-height: calc(100vh - 57px);
+  background: var(--bg-primary);
+}
+
+.page-title {
+  font-size: 20px;
+  margin: 4px 2px 16px;
+}
+
+/* Card */
+.card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  box-shadow: var(--shadow-1);
+  overflow: hidden;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.card-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-body {
+  padding: 16px;
+}
+
+.card-footer {
+  border-top: 1px solid var(--border-color);
+  padding: 12px 16px;
+  background: var(--bg-secondary);
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.tab {
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.tab.active {
+  color: var(--color-secondary);
+  border-color: var(--color-secondary);
+}
+
+/* Progress */
+.progress {
+  width: 100%;
+}
+
+.progress-track {
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--muted);
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-secondary), var(--color-accent));
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.progress-label {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* Footer */
+.footer {
+  border-top: 1px solid var(--border-color);
+  padding: 14px 16px;
+  text-align: center;
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .layout {
+    grid-template-columns: 200px 1fr;
   }
 }
 
-/* Responsive design for mobile */
-@media (max-width: 768px) {
-  .theme-toggle {
-    top: 10px;
-    right: 10px;
-    padding: 8px 16px;
-    font-size: 12px;
+@media (max-width: 860px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .sidebar {
+    display: none;
+  }
+  .top-nav {
+    display: flex;
   }
 }
